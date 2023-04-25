@@ -1,28 +1,28 @@
 import openai
 import config
 
-# Configuración de las claves de API de OpenAI
+# Setting up OpenAI API keys
 openai.api_key = config.OPENAI_API_KEY
 
 
 def request_modified_code_from_agent(original_code, functionality):
     """
-    Esta función realiza una solicitud a la API de GPT-3.5-turbo para modificar el código proporcionado
-    según la funcionalidad solicitada.
+    This function makes a request to the GPT-3.5-turbo API to modify the provided code
+    according to the requested functionality.
 
     Args:
-        original_code (str): El código Python original proporcionado por el usuario.
-        functionality (str): La solicitud específica para modificar el código.
+        original_code (str): The original Python code provided by the user.
+        functionality (str): The specific request to modify the code.
 
     Returns:
-        str: El código Python modificado según la solicitud.
+        str: The modified Python code according to the request.
     """
     system_prompt = (f"""
     User provide the Python script and an action you would like to perform on it. The script should align with the following requirements:
     The script will be written as the main file, without comments, and as efficient as possible.
     """)
 
-    # Parámetros de la solicitud a la API de GPT-3
+    # API request parameters
     parameters = {
         "model": "gpt-3.5-turbo",
         "messages": [
@@ -35,7 +35,7 @@ def request_modified_code_from_agent(original_code, functionality):
         "presence_penalty": 0
     }
 
-    # Generación del código modificado utilizando la API de GPT-3
+    # Generating modified code using GPT-3 API
     response = openai.ChatCompletion.create(**parameters)
     modified_code = response.choices[0].message.content
     return modified_code
@@ -43,33 +43,33 @@ def request_modified_code_from_agent(original_code, functionality):
 
 def generate_modified_code(original_code):
     """
-    Esta función es un contenedor para request_modified_code_from_agent, proporcionando
-    una capa adicional de abstracción en caso de que se necesite realizar algún procesamiento
-    adicional en el futuro.
+    This function is a container for request_modified_code_from_agent, providing
+    an additional layer of abstraction in case any further processing is needed
+    in the future.
 
     Args:
-        original_code (str): El código Python original proporcionado por el usuario.
+        original_code (str): The original Python code provided by the user.
 
     Returns:
-        str: El código Python modificado según la solicitud.
+        str: The modified Python code according to the request.
     """
-    modified_code = request_modified_code_from_agent(original_code, "traducir al inglés")
+    modified_code = request_modified_code_from_agent(original_code, "translate to English")
     return modified_code
 
 
 def main():
-    # Carga del código original desde un archivo
+    # Loading original code from a file
     with open("main.py", "r") as f:
         original_code = f.read()
 
-    # Generación del código modificado
+    # Generating modified code
     modified_code = generate_modified_code(original_code)
 
-    # Escritura del código modificado a un archivo
+    # Writing modified code to a file
     with open("modified_main.py", "w") as f:
         f.write(modified_code)
 
 
-# Ejecuta la función principal si el script se llama directamente
+# Running the main function if the script is called directly
 if __name__ == "__main__":
     main()
