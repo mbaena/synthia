@@ -3,3 +3,4 @@ Flask
 requests
 PyGithub
 gitpython
+python-dotenv

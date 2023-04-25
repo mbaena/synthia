@@ -17,17 +17,17 @@ def request_modified_code_from_agent(original_code, functionality):
     Returns:
         str: El código Python modificado según la solicitud.
     """
-    system_prompt = ("Estás hablando con un asistente de programación especializado en modificar y mejorar "
-                     "el código Python. Para cada entrada de usuario que contenga código Python, el asistente "
-                     "proporcionará una versión modificada del código que aborde las solicitudes o problemas "
-                     "específicos del usuario. Sólo responderá con código python.")
+    system_prompt = (f"""
+    User provide the Python script and an action you would like to perform on it. The script should align with the following requirements:
+    The script will be written as the main file, without comments, and as efficient as possible.
+    """)
 
     # Parámetros de la solicitud a la API de GPT-3
     parameters = {
         "model": "gpt-3.5-turbo",
         "messages": [
             {'role': 'system', 'content': system_prompt},
-            {'role': 'user', 'content': f"funcionalidad: {functionality}; código:{original_code}"}
+            {'role': 'user', 'content': f"action: \n{functionality};\n\n Python script: \n{original_code}"}
         ],
         "temperature": 0.5,
         "top_p": 1,
