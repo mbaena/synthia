@@ -23,7 +23,7 @@ def modify_code_and_create_pull_request(file_name, functionality):
         modified_code = request_modified_code_from_agent(original_code, functionality)
 
     # Guardar los cambios en la nueva rama
-    with open(os.path.join(project_path, "modified_" + file_name), "w") as f:
+    with open(os.path.join(project_path, file_name), "w") as f:
         f.write(modified_code)
 
     # Realizar commit y push de los cambios a la rama
