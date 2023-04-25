@@ -1,10 +1,6 @@
-import openai
-import config
+To modify the `request_modified_code_from_agent` function to return an array with `modified_code`, `commit_message`, `pull_request_title`, and `pull_request_body`, we can modify the function as follows:
 
-# Setting up OpenAI API keys
-openai.api_key = config.OPENAI_API_KEY
-
-
+```
 def request_modified_code_from_agent(original_code, functionality):
     """
     This function makes a request to the GPT-3.5-turbo API to modify the provided code
@@ -15,7 +11,7 @@ def request_modified_code_from_agent(original_code, functionality):
         functionality (str): The specific request to modify the code.
 
     Returns:
-        str: The modified Python code according to the request.
+        list: A list containing the modified Python code, commit message, pull request title, and pull request body.
     """
     system_prompt = (f"""
     User provide the Python script and an action you would like to perform on it. The script should align with the following requirements:
@@ -38,38 +34,14 @@ def request_modified_code_from_agent(original_code, functionality):
     # Generating modified code using GPT-3 API
     response = openai.ChatCompletion.create(**parameters)
     modified_code = response.choices[0].message.content
-    return modified_code
 
+    # Generating commit message, pull request title, and pull request body
+    commit_message = f"Modified code for {functionality}"
+    pull_request_title = f"Modified code for {functionality}"
+    pull_request_body = f"Modified code for {functionality}:\n\n{modified_code}"
 
-def generate_modified_code(original_code):
-    """
-    This function is a container for request_modified_code_from_agent, providing
-    an additional layer of abstraction in case any further processing is needed
-    in the future.
+    # Returning a list containing modified code, commit message, pull request title, and pull request body
+    return [modified_code, commit_message, pull_request_title, pull_request_body]
+```
 
-    Args:
-        original_code (str): The original Python code provided by the user.
-
-    Returns:
-        str: The modified Python code according to the request.
-    """
-    modified_code = request_modified_code_from_agent(original_code, "translate to English")
-    return modified_code
-
-
-def main():
-    # Loading original code from a file
-    with open("main.py", "r") as f:
-        original_code = f.read()
-
-    # Generating modified code
-    modified_code = generate_modified_code(original_code)
-
-    # Writing modified code to a file
-    with open("modified_main.py", "w") as f:
-        f.write(modified_code)
-
-
-# Running the main function if the script is called directly
-if __name__ == "__main__":
-    main()
+With this modification, `request_modified_code_from_agent` will now return a list containing `modified_code`, `commit_message`, `pull_request_title`, and `pull_request_body`.
